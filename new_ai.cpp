@@ -82,7 +82,6 @@ int outside(pair<int, int> p, pair<int, int> x)
 	return ret;
 }
 
-
 Find find(pair<int, int> p, int strategy)
 {
 	vec<pair<int, int>> d1(4);
@@ -360,7 +359,7 @@ int main(void)
 			}
 		}
 
-		if (t == 1500) {
+		if (t == 0) {
 			int o = 0;
 			while(o < 4) {
 				pair<int, int> g = roadside[rand() % (int)roadside.size()];
