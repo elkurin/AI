@@ -150,7 +150,7 @@ Find find(pair<int, int> p, int strategy)
 			for (int i = 0; i < 4 * l; i++) {
 				if (outside(d[l][i], v[j])) continue;
 				if (board[v[j].first + d[l][i].first][v[j].second + d[l][i].second] == '.') {
-					count += keep - l;
+					count += min - l;
 				}
 			}
 		}
@@ -184,14 +184,14 @@ Find find(pair<int, int> p, int strategy)
 	return give;
 }
 
-vec<pair<int, int>> beside(void)
+vec<pair<int, int>> beside(vec<vec<bool>> built)
 {
 	vec<pair<int, int>> give;
 	vec<pair<int, int>> d1(4);
     d1 = {{1, 0}, {- 1, 0}, {0, 1}, {0, - 1}};
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < n; j++) {
-			if (board[i][j] != '#') continue;
+			if (built[i][j]) continue;
 			int count = 0;
 			for (int k = 0; k < 4; k++) {
 				if (outside({i, j}, d1[k])) continue;
@@ -218,7 +218,7 @@ int main(void)
 		board.pb(str);
 		// cout << "no more segmentation fault" << endl;
 		for (int j = 0; j < n; j++) {
-			if (board[i][j] != '.') built[i][j] = 1;
+			if (board[i][j] != '#') built[i][j] = 1;
 			if (board[i][j] != '.' && board[i][j] != '#') {
 				// cout << "in loop" << endl;
 				pair<int, int> p = {i, j};
@@ -246,15 +246,23 @@ int main(void)
 		baseput.pb(q);
 	}
 
-	vec<pair<int, int>> roadside = beside();
+	// cout << "oooooooooooooooo" << board[10][15] << " " << built[10][15] << endl;
+	vec<pair<int, int>> roadside = beside(built);
 	// for (int i = 0; i < (int)roadside.size(); i++) {
 	// 	cout << roadside[i].first << " " << roadside[i].second << endl;
 	// }
 
 	int l = 0;
-	vec<int> init_basehp;
+	vec<int> prev_basehp(n);
 
 	// cout << "befor t loop" << endl;
+
+	// for (int i = 0; i < n; i++) {
+	// 	for (int j = 0; j < n; j++) {
+	// 		cout << built[i][j] << " ";
+	// 	}
+	// 	cout << endl;
+	// }
 
 	for (int t = 0; t < time_finish; t++) {
 		// cout << "gimme money" << endl;
@@ -274,6 +282,8 @@ int main(void)
 			creeps.pb(crp);
 		}
 
+		if (creepnum > 15) strategy = 1;
+
 		// cout << "end of creep" << endl;
 
 		int basenum;
@@ -283,16 +293,18 @@ int main(void)
 			// cout << "booooo " << basenum << " " << i << endl;
 			int hp;
 			cin >> hp;
-			if (t == 0) {
-				init_basehp.pb(hp);
-			}
 			basehp.pb(hp);
 		}
 		// cout << "end of base" << endl;
 		vec<int> yavai;
+		if (t != 0) {
+			for (int i = 0; i < basenum; i++) {
+				if (basehp[i] != prev_basehp[i]) strategy = 1;
+				yavai.pb(i);
+			}
+		}
 		for (int i = 0; i < basenum; i++) {
-			if (basehp[i] != init_basehp[i]) strategy = 1;
-			yavai.pb(i);
+			prev_basehp[i] = basehp[i];
 		}
 		vec<Find> out;
 		while(l < (int)base.size()) {
@@ -303,39 +315,42 @@ int main(void)
 				// cout << "before built" << endl;
 				// cout << " " << baseput[l].place.first << " " << baseput[l].place.second << endl;
 				// cout << built[14][13] << endl;
-				built[baseput[l].place.first][baseput[l].place.second] = true;
+				built[baseput[l].place.first][baseput[l].place.second] = 1;
 				// cout << "ha~~ kireso~~" << endl;
 			} else break;
 			l++;
 		}
 
-		for (int o = 0; o < 10; o++) {
-			pair<int, int> g = roadside[rand() % (int)roadside.size()];
-			// cout << g.first << " " << g.second << endl;
-			if (built[g.first][g.second]) continue;
-			out.pb({g, baseput[0].towernum});
-		}
+		// for (int o = 0; o < 10; o++) {
+		// 	pair<int, int> g = roadside[rand() % (int)roadside.size()];
+		// 	// cout << g.first << " " << g.second << endl;
+		// 	if (built[g.first][g.second]) continue;
+		// 	out.pb({g, baseput[0].towernum});
+		// }
 
 		if (strategy) {
-			for (int i = 0; i < (int)yavai.size(); i++) {
-				if (money - towers[baseput[yavai[i]].towernum].cost >= 0) {
-					Find p = find(base[i], 1);
-					// cout << "^o^/~~" << endl;
-					if (!built[p.place.first][p.place.second]) {
-						out.pb(find(base[i], 1));
-					} else {
-						p = find(base[i], 2);
-						if (!built[p.place.first][p.place.second]) {
-							out.pb(find(base[i], 1));
-						}
-					}
-				}
-				// cout << "catch me if U can" << endl;
-			}
-			for (int o = 0; o < 2; o++) {
+			// for (int i = 0; i < (int)yavai.size(); i++) {
+			// 	if (money - towers[baseput[yavai[i]].towernum].cost >= 0) {
+			// 		Find p = find(base[i], 1);
+			// 		// cout << "^o^/~~" << endl;
+			// 		if (!built[p.place.first][p.place.second]) {
+			// 			out.pb(find(base[i], 1));
+			// 			built[p.place.first][p.place.second] = 1;
+			// 		} else {
+			// 			p = find(base[i], 2);
+			// 			if (!built[p.place.first][p.place.second]) {
+			// 				out.pb(find(base[i], 1));
+			// 				built[p.place.first][p.place.second] = 1;
+			// 			}
+			// 		}
+			// 	}
+			// 	// cout << "catch me if U can" << endl;
+			// }
+			for (int o = 0; o < 1; o++) {
 				pair<int, int> g = roadside[rand() % (int)roadside.size()];
 				if (built[g.first][g.second]) continue;
 				out.pb({g, baseput[0].towernum});
+				built[g.first][g.second] = 1;
 			}
 		}
 
@@ -344,6 +359,7 @@ int main(void)
 				pair<int, int> g = roadside[rand() % (int)roadside.size()];
 				if (built[g.first][g.second]) continue;
 				out.pb({g, baseput[0].towernum});
+				built[g.first][g.second] = 1;
 			}
 		}
 
