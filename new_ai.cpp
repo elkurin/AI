@@ -145,18 +145,10 @@ Find find(pair<int, int> p, int strategy)
 	for (int j = 0; j < (int)v.size(); j++) {
 		int count = 0;
 		for (int l = 1; l <= keep; l++) {
-			for (int i = 0; i < l; i++) {
-				if (board[v[j].first + l - i][v[j].second + i] == '.') {
-					count++;
-				}
-				if (board[v[j].first + i][v[j].second + l - i] == '.') {
-					count++;
-				}
-				if (board[v[j].first - l - i][v[j].second + i] == '.') {
-					count++;
-				}
-				if (board[v[j].first + i][v[j].second - l - i] == '.') {
-					count++;
+			for (int i = 0; i < 4 * l; i++) {
+				if (outside(d[l][i], v[j])) continue;
+				if (board[v[j].first + d[l][i].first][v[j].second + d[l][i].second] == '.') {
+					count += keep - l;
 				}
 			}
 		}
@@ -211,6 +203,7 @@ vec<pair<int, int>> beside(void)
 
 int main(void)
 {
+	// cout << "start" << endl;
 	cin >> n;
 	cin >> money;
 
@@ -237,9 +230,9 @@ int main(void)
 	}
 
 	vec<pair<int, int>> roadside = beside();
-	for (int i = 0; i < roadside().size; i++) {
-		cout << roadside[i].first << " " << roadside[i].second << endl;
-	}
+	// for (int i = 0; i < (int)roadside.size(); i++) {
+	// 	cout << roadside[i].first << " " << roadside[i].second << endl;
+	// }
 
 	cin >> creephp;
 	cin >> creepmoney;
@@ -283,6 +276,7 @@ int main(void)
 		cin >> basenum;
 		vec<int> basehp;
 		for (int i = 0; i < basenum; i++) {
+			// cout << "booooo " << basenum << " " << i << endl;
 			int hp;
 			cin >> hp;
 			if (t == 0) {
@@ -335,7 +329,7 @@ int main(void)
 		}
 
 		if (t == 1500) {
-			for (int o = 0; o < 3; o++) {
+			for (int o = 0; o < 5; o++) {
 				pair<int, int> g = roadside[rand() % (int)roadside.size()];
 				if (built[g.first][g.second]) continue;
 				out.pb({g, baseput[0].towernum});
