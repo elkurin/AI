@@ -51,9 +51,11 @@ int givetower(int min)
 	// if (strategy == 0) {
 		int give = 0;
 		int max = 0;
+		// cout << "may the force be with you " << towers.size() << endl;
 		for (int i = 0; i < (int)towers.size(); i++) {
 			if (towers[i].range < min) continue;
 			if (max < towers[i].damage + towers[i].range) {
+				// cout << "hoge " << towers[i].damage + towers[i].range << endl;
 				max = towers[i].damage + towers[i].range;
 				give = i;
 			}
@@ -170,7 +172,7 @@ Find find(pair<int, int> p, int strategy)
 		}
 	}
 	// cout << "before tower" << endl;
-	int get = givetower(3);
+	int get = givetower(2);
 	Find give;
 	if (strategy == 0) {
 		give = {keep1, get};
@@ -203,6 +205,7 @@ vec<pair<int, int>> beside(void)
 
 int main(void)
 {
+	srand(1);
 	// cout << "start" << endl;
 	cin >> n;
 	cin >> money;
@@ -224,6 +227,20 @@ int main(void)
 		}
 	}
 
+	cin >> creephp;
+	cin >> creepmoney;
+
+	cin >> m;
+
+	for (int i = 0; i < m; i++) {
+		// cout << "towertower" << endl;
+		Tower t;
+		cin >> t.range;
+		cin >> t.damage;
+		cin >> t.cost;
+		towers.pb(t);
+	}
+
 	for (int i = 0 ; i < (int)base.size(); i++) {
 		Find q = find(base[i], 0);
 		baseput.pb(q);
@@ -233,19 +250,6 @@ int main(void)
 	// for (int i = 0; i < (int)roadside.size(); i++) {
 	// 	cout << roadside[i].first << " " << roadside[i].second << endl;
 	// }
-
-	cin >> creephp;
-	cin >> creepmoney;
-
-	cin >> m;
-
-	for (int i = 0; i < m; i++) {
-		Tower t;
-		cin >> t.range;
-		cin >> t.damage;
-		cin >> t.cost;
-		towers.pb(t);
-	}
 
 	int l = 0;
 	vec<int> init_basehp;
@@ -303,6 +307,13 @@ int main(void)
 				// cout << "ha~~ kireso~~" << endl;
 			} else break;
 			l++;
+		}
+
+		for (int o = 0; o < 10; o++) {
+			pair<int, int> g = roadside[rand() % (int)roadside.size()];
+			// cout << g.first << " " << g.second << endl;
+			if (built[g.first][g.second]) continue;
+			out.pb({g, baseput[0].towernum});
 		}
 
 		if (strategy) {
