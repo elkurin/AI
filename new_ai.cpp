@@ -197,6 +197,7 @@ vec<pair<int, int>> beside(void)
     d1 = {{1, 0}, {- 1, 0}, {0, 1}, {0, - 1}};
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < n; j++) {
+			if (board[i][j] != '#') continue;
 			int count = 0;
 			for (int k = 0; k < 4; k++) {
 				if (outside({i, j}, d1[k])) continue;
@@ -236,6 +237,9 @@ int main(void)
 	}
 
 	vec<pair<int, int>> roadside = beside();
+	for (int i = 0; i < roadside().size; i++) {
+		cout << roadside[i].first << " " << roadside[i].second << endl;
+	}
 
 	cin >> creephp;
 	cin >> creepmoney;
@@ -322,6 +326,11 @@ int main(void)
 					}
 				}
 				// cout << "catch me if U can" << endl;
+			}
+			for (int o = 0; o < 2; o++) {
+				pair<int, int> g = roadside[rand() % (int)roadside.size()];
+				if (built[g.first][g.second]) continue;
+				out.pb({g, baseput[0].towernum});
 			}
 		}
 
