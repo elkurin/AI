@@ -351,6 +351,7 @@ int main(void)
 			while(1) {
 				pair<int, int> g = roadside[rand() % (int)roadside.size()];
 				if (built[g.first][g.second]) continue;
+				if (g.first <= 0 || g.first >= n - 1 || g.second <= 0 || g.second >= n - 1) continue;
 				if (towerplace[g.first + 1][g.second] || towerplace[g.first][g.second + 1] || towerplace[g.first - 1][g.second] || towerplace[g.first][g.second - 1]) continue;
 				out.pb({g, baseput[0].towernum});
 				built[g.first][g.second] = 1;
@@ -364,6 +365,7 @@ int main(void)
 			while(o < 4) {
 				pair<int, int> g = roadside[rand() % (int)roadside.size()];
 				if (built[g.first][g.second]) continue;
+				if (g.first <= 0 || g.first >= n - 1 || g.second <= 0 || g.second >= n - 1) continue;
 				if (towerplace[g.first + 1][g.second] || towerplace[g.first][g.second + 1] || towerplace[g.first - 1][g.second] || towerplace[g.first][g.second - 1]) continue;
 				out.pb({g, baseput[0].towernum});
 				built[g.first][g.second] = 1;
