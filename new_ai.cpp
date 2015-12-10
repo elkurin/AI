@@ -359,9 +359,9 @@ int main(void)
 			}
 		}
 
-		if (t == 0 || t == 500) {
+		if (t == 0 || t == 500 || 1000) {
 			int o = 0;
-			while(o < 5) {
+			while(o < 4) {
 				pair<int, int> g = roadside[rand() % (int)roadside.size()];
 				if (built[g.first][g.second]) continue;
 				if (g.first <= 0 || g.first >= n - 1 || g.second <= 0 || g.second >= n - 1) continue;
