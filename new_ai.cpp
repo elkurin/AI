@@ -359,7 +359,7 @@ int main(void)
 			}
 		}
 
-		if (t == 0 || t == 500 || 1000) {
+		if (t == 0 || t == 500 || t == 1000) {
 			int o = 0;
 			while(o < 4) {
 				pair<int, int> g = roadside[rand() % (int)roadside.size()];
