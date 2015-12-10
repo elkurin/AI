@@ -359,13 +359,15 @@ int main(void)
 			}
 		}
 
-		if (t == 0) {
+		if (t == 0 || t == 500) {
 			int o = 0;
-			while(o < 4) {
+			while(o < 5) {
 				pair<int, int> g = roadside[rand() % (int)roadside.size()];
 				if (built[g.first][g.second]) continue;
 				if (g.first <= 0 || g.first >= n - 1 || g.second <= 0 || g.second >= n - 1) continue;
 				if (towerplace[g.first + 1][g.second] || towerplace[g.first][g.second + 1] || towerplace[g.first - 1][g.second] || towerplace[g.first][g.second - 1]) continue;
+				money -= towers[baseput[0].towernum].cost;
+				if (money < 0) break;
 				out.pb({g, baseput[0].towernum});
 				built[g.first][g.second] = 1;
 				towerplace[g.first][g.second] = 1;
