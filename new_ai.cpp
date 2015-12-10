@@ -211,6 +211,7 @@ int main(void)
 	cin >> money;
 
 	vec<vec<bool>> built(n, vec<bool>(n, false));
+	vec<vec<bool>> towerplace(n, vec<bool>(n, false));
 
 	for (int i = 0; i < n; i++) {
 		string str;
@@ -316,6 +317,7 @@ int main(void)
 				// cout << " " << baseput[l].place.first << " " << baseput[l].place.second << endl;
 				// cout << built[14][13] << endl;
 				built[baseput[l].place.first][baseput[l].place.second] = 1;
+				towerplace[baseput[l].place.first][baseput[l].place.second] = 1;
 				// cout << "ha~~ kireso~~" << endl;
 			} else break;
 			l++;
@@ -346,20 +348,27 @@ int main(void)
 			// 	}
 			// 	// cout << "catch me if U can" << endl;
 			// }
-			for (int o = 0; o < 1; o++) {
+			while(1) {
 				pair<int, int> g = roadside[rand() % (int)roadside.size()];
 				if (built[g.first][g.second]) continue;
+				if (towerplace[g.first + 1][g.second] || towerplace[g.first][g.second + 1] || towerplace[g.first - 1][g.second] || towerplace[g.first][g.second - 1]) continue;
 				out.pb({g, baseput[0].towernum});
 				built[g.first][g.second] = 1;
+				towerplace[g.first][g.second] = 1;
+				break;
 			}
 		}
 
 		if (t == 1500) {
-			for (int o = 0; o < 5; o++) {
+			int o = 0;
+			while(o < 4) {
 				pair<int, int> g = roadside[rand() % (int)roadside.size()];
 				if (built[g.first][g.second]) continue;
+				if (towerplace[g.first + 1][g.second] || towerplace[g.first][g.second + 1] || towerplace[g.first - 1][g.second] || towerplace[g.first][g.second - 1]) continue;
 				out.pb({g, baseput[0].towernum});
 				built[g.first][g.second] = 1;
+				towerplace[g.first][g.second] = 1;
+				o++;
 			}
 		}
 
